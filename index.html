@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sound Length Calculator</title>
+    <script src="jquery-2.1.0.min.js" type="text/javascript"></script>
+    <script src="soundcalc.js" type="text/javascript"></script>
+    <link href="soundcalc.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <input type="button" value="Add Sound" id="addNewRow"/>
+    <input type="button" value="Add Time Manually" id="addNewTime"/>
+    <div id="rowContainers"></div>
+    <hr>
+    <b>Total:</b>
+    <p id = "total">
+      0:00
+    </p>
+    <b>Target: </b><i>(enter as x:xx)</i>
+    <input type = "text" id = "targetTime"/>
+    <input type="button" id="refresh" value="Calculate difference"/>
+    <br>
+    <b>Difference:</b>
+    <p id = "difference"/>
+  </body>
+</html>
