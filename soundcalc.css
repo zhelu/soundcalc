@@ -2,3 +2,25 @@ div.rowContainer {
   border: 1px black solid;
   padding-left: 10px;
 }
+
+div.segment {
+  border: 2px black solid;
+  padding: 2px;
+  margin-bottom: 2px;
+}
+
+circle.clock {
+  stroke: rgba(128, 128, 128, 0.6);
+  stroke-width: 5px;
+  fill: none;
+}
+
+path.dead {
+  stroke: black;
+  stroke-width: 1px;
+  fill: black;
+}
+
+p.warning {
+  color: rgb(200, 0, 0);
+}
