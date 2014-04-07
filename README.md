@@ -1,4 +1,3 @@
-This program accepts as inputs either sound files from the local file system or manually entered times. The total duration is displayed.
+This program is available on GitHub at: zhelu.github.io/soundcalc/
 
-If desired, the program will also compute the difference between the total duration and a target, desired duration. This program is being made available on GitHub at:
-zhelu.github.io/soundcalc/
+The purpose of the program is compute total times for 3 segments of audio that should fit within a prescribed schedule for a specific 1 hour radio show: WGBH's Innovation Hub.
