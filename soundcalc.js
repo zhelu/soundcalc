@@ -2,41 +2,41 @@ function secondsToFormattedString(totalSeconds) {
   var absSeconds = Math.abs(totalSeconds);
   var seconds = absSeconds % 60;
   var minutes = Math.floor(absSeconds / 60);
-  return (totalSeconds < 0 ? "-" : "") + ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds).match("\\d+:\\d\\d(\\.\\d)?(\\d)?")[0];
+  return (totalSeconds < 0 ? "-" : "") + ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds).match("\\d+:\\d\\d(\\.\\d)?")[0];
 }
 
 function logWarning(text) {
-  d3.select("#warningsDiv").append("p").classed("warning", true).text(text);
+  $("#warningsDiv").append("<p class=\"warning\">" + text + "</p>").addClass("warning");
 }
 
 function displayWarnings() {
-  d3.select("#warningsDiv").remove();
-  Global.warnings.append("div").attr("id", "warningsDiv");
+  $("#warningsDiv").detach();
+  Global.warnings.append("<div id=\"warningsDiv\"></div>");
+  var time0 = Number($("#totalTime0").attr("time"));
   var time1 = Number($("#totalTime1").attr("time"));
   var time2 = Number($("#totalTime2").attr("time"));
-  var time3 = Number($("#totalTime3").attr("time"));
-  if (time1 < 11 * 60) {
+  if (time0 < 11 * 60) {
     logWarning("Segment A is shorter than 11:00");
   }
-  if (time1 > 16 * 60) {
+  if (time0 > 16 * 60) {
     logWarning("Segment A is longer than 16:00");
   }
-  if (time2 < 14 * 60) {
+  if (time1 < 14 * 60) {
     logWarning("Segment B is shorter than 14:00");
   }
-  if (time2 > 24 * 60) {
+  if (time1 > 24 * 60) {
     logWarning("Segment B is longer than 24:00");
   }
-  if (time3 < 15.5 * 60) {
+  if (time2 < 15.5 * 60) {
     logWarning("Segment C is shorter than 15:30");
   }
-  if (time3 > 20.5 * 60) {
+  if (time2 > 20.5 * 60) {
     logWarning("Segment C is longer than 20:30");
   }
-  if (time1 + 60 + time2 > 36 * 60) {
+  if (time0 + 60 + time1 > 36 * 60) {
     logWarning("Segments A and B are too long together");
   }
-  if (time2 + 60 + time3 > 40.5 * 60) {
+  if (time1 + 60 + time2 > 40.5 * 60) {
     logWarning("Segments B and C are too long together");
   }
 }
@@ -100,7 +100,9 @@ function totalTimeForSegment(index) {
 }
 
 var Global = new Object();
-Global.i = new Array(0, 0, 0, 0);
+Global.i = new Array(0, 0, 0);
+Global.timeSound = new Array(0, 0, 0);
+Global.timeManual = new Array(0, 0, 0);
 $(document).ready(
 // prepare document
 function() {
@@ -142,7 +144,7 @@ function() {
     if (userTime === null) {
       return;
     }
-    var timePieces = userTime.match("(\\d*):(\\d+)");
+    var timePieces = userTime.match("(\\d*):(\\d\\d)");
     if (timePieces === null || timePieces.length == 0) {
       return;
     }
@@ -154,7 +156,7 @@ function() {
       var k = j;
       var n = index;
       var userTime = $("#time" + k + "-" + n).val();
-      var timePieces = userTime.match("(\\d*):(\\d+)");
+      var timePieces = userTime.match("(\\d*):(\\d\\d)");
       if (timePieces === null || timePieces.length == 0) {
         return;
       }
@@ -183,9 +185,10 @@ function() {
   //var bottomOfHour = Global.svg.append("path");
   //computeClosedArcD(topOfHour, 0, 360);
   //computeClosedArcD(bottomOfHour, 3510, 3600);
-  Global.warnings = d3.select("body").append("div").classed("segment", true);
-  Global.warnings.append("p").append("b").text("Problems");
-  Global.warnings.append("div").attr("id", "warningsDiv");
+  $("body").append("<div class=\"segment\"></div>");
+  Global.warnings = $("body > div.segment").last(); 
+  Global.warnings.append("<p><b>Problems</b></p>");
+  Global.warnings.append("<div id=\"warningsDiv\"></div>");
   totalTime();
 });
 

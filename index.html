@@ -3,34 +3,33 @@
   <head>
     <title>Sound Length Calculator</title>
     <script src="jquery-2.1.0.min.js" type="text/javascript"></script>
-    <script src="d3.min.js" type="text/javascript"></script>
     <script src="soundcalc.js" type="text/javascript"></script>
     <link href="soundcalc.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
-    <div id="segment1" class="segment">
+    <div id="segment0" class="segment">
       <b>Segment A</b> (11:00-16:00)
+      <br/>
+      <input type="button" value="Add Sound" id="addNewRow0" class="addNewRow"/>
+      <input type="button" value="Add Time Manually" id="addNewTime0" class="addNewTime"/>
+      <div id="rowContainers0"></div>
+      <b>Segment A total: <span id="totalTime0" class="totalTime" time=0>0:00</span></b>
+    </div>
+    <div id="segment1" class="segment">
+      <b>Segment B</b> (14:00-24:00)
       <br/>
       <input type="button" value="Add Sound" id="addNewRow1" class="addNewRow"/>
       <input type="button" value="Add Time Manually" id="addNewTime1" class="addNewTime"/>
       <div id="rowContainers1"></div>
-      <b>Segment A total: <span id="totalTime1" class="totalTime" time=0>0:00</span></b>
+      <b>Segment B total: <span id="totalTime1" class="totalTime" time=0>0:00</span></b>
     </div>
     <div id="segment2" class="segment">
-      <b>Segment B</b> (14:00-24:00)
+      <b>Segment C</b> (15:30-20:30)
       <br/>
       <input type="button" value="Add Sound" id="addNewRow2" class="addNewRow"/>
       <input type="button" value="Add Time Manually" id="addNewTime2" class="addNewTime"/>
       <div id="rowContainers2"></div>
-      <b>Segment B total: <span id="totalTime2" class="totalTime" time=0>0:00</span></b>
-    </div>
-    <div id="segment3" class="segment">
-      <b>Segment C</b> (15:30-20:30)
-      <br/>
-      <input type="button" value="Add Sound" id="addNewRow3" class="addNewRow"/>
-      <input type="button" value="Add Time Manually" id="addNewTime3" class="addNewTime"/>
-      <div id="rowContainers3"></div>
-      <b>Segment C total: <span id="totalTime3" class="totalTime" time=0>0:00</span></b>
+      <b>Segment C total: <span id="totalTime2" class="totalTime" time=0>0:00</span></b>
     </div>
     <div id="segmentTotal" class="segment">
       <b>Total: </b>(56:30 target)<br/><b><span id="totalTime">0:00</span></b>
