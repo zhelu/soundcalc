@@ -9,18 +9,58 @@ div.segment {
   margin-bottom: 2px;
 }
 
+div.warning {
+  border: 2px black solid;
+  padding: 2px;
+  min-width: 300px;
+  min-height: 100px;
+}
+
+div.other{
+  border: none;  
+}
+
 circle.clock {
   stroke: rgba(128, 128, 128, 0.6);
   stroke-width: 5px;
   fill: none;
 }
 
+line.tick {
+  stroke: rgba(128, 128, 128, 0.6);
+  stroke-width: 5px;
+}
+
 path.dead {
-  stroke: black;
+  stroke: rgba(128, 128, 128, 0.6);
   stroke-width: 1px;
-  fill: black;
+  fill: rgba(128, 128, 128, 0.6);
+}
+
+path.floating {
+  stroke: none;
+  stroke-width: 0px;
+  fill: rgba(255, 255, 0, 0.6);
 }
 
 p.warning {
   color: rgb(200, 0, 0);
+}
+
+path.arc {
+  stroke: rgb(0, 128, 0);
+  stroke-width: 10px;
+  fill: none;
+}
+
+line {
+  stroke: black;
+  stroke-width: 1px;
+}
+.warningUnder {
+  stroke: rgb(255, 0, 0) !important;
+}
+
+.warningOver {
+  stroke: rgb(255, 0, 255) !important;
 }
