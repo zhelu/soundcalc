@@ -64,3 +64,19 @@ line {
 .warningOver {
   stroke: rgb(255, 0, 255) !important;
 }
+
+input.time {
+  width: 70px;
+}
+
+input.comment {
+  width: 150px;
+}
+
+input.error {
+  color: rgb(255, 0, 0);
+}
+
+input[type="file"] {
+  max-width: 100%;
+}
