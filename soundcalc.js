@@ -212,15 +212,17 @@ function() {
   $(".addNewTime").click(function() {
     var index = this.id.substring(this.id.length - 1);
     var j = Global.i[index];
-    $("#rowContainers" + index).append("<div class=\"rowContainer\"><input type=\"text\" name=\"time\" id=\"time" + j + "-" + index + "\" time=\"0\" value=\"0:00\"/><input id=\"refreshManual" + j + "-" + index + "\" type=\"button\" value=\"Refresh\"/><input type=\"button\" + id=\"delete" + j + "-" + index + "\" value=\"Delete\"/></div>");
+    $("#rowContainers" + index).append("<div class=\"rowContainer\"><input type=\"text\" class=\"time\" name=\"time\" id=\"time" + j + "-" + index + "\" time=\"0\" value=\"0:00\"/><input type=\"text\" placeholder=\"Comments\" class=\"comment\"/><input id=\"refreshManual" + j + "-" + index + "\" type=\"button\" value=\"Refresh\"/><input type=\"button\" + id=\"delete" + j + "-" + index + "\" value=\"Delete\"/></div>");
     $("#refreshManual" + j + "-" + index).click(function() {
       var k = j;
       var n = index;
       var userTime = $("#time" + k + "-" + n).val();
       var timePieces = userTime.match("(\\d*):(\\d\\d)");
       if (timePieces === null || timePieces.length == 0) {
+        $("#time" + k + "-" + n).addClass("error");
         return;
       }
+      $("#time" + k + "-" + n).removeClass("error");
       var time = Number(timePieces[1]) * 60 + Number(timePieces[2]);
       $("#time" + k + "-" + n).attr("time", time);
       totalTimeForSegment(n);
