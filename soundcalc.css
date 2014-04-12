@@ -80,3 +80,8 @@ input.error {
 input[type="file"] {
   max-width: 100%;
 }
+
+text.tick{
+  fill: rgb(128, 128, 128);
+  font-weight: bold;
+}

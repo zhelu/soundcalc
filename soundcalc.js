@@ -1,6 +1,9 @@
-function secondsToFormattedString(totalSeconds) {
+function secondsToFormattedString(totalSeconds, round) {
   var absSeconds = Math.abs(totalSeconds);
   var seconds = absSeconds % 60;
+  if (round) {
+    seconds = Math.floor(seconds);
+  }
   var minutes = Math.floor(absSeconds / 60);
   return (totalSeconds < 0 ? "-" : "") + ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds).match("\\d+:\\d\\d(\\.\\d)?")[0];
 }
@@ -13,7 +16,7 @@ function updateText(obj, time, radius, text) {
   var radians = Math.PI / 1800 * time;
   var x = radius * Math.sin(radians) + Global.width / 2 - 8;
   var y = -radius * Math.cos(radians) + Global.height / 2 + 5;
-  if (radians % (2 * Math.PI) > Math.PI) {
+  if (radians % (2 * Math.PI) > Math.PI - 0.01) {
     x -= 50;
   }
   return obj.attr("x", x).attr("y", y).text(text);
@@ -153,15 +156,15 @@ function refreshDrawing() {
   var end1 = start1 + Global.segmentTime[1];
   var start2 = end1 + 60;
   var end2 = start2 + Global.segmentTime[2];
-  updateLine(Global.lines[0], end0, Global.radius * 1.05);
-  updateLine(Global.lines[1], start1, Global.radius * 1.05);
-  updateLine(Global.lines[2], end1, Global.radius * 1.05);
-  updateLine(Global.lines[3], start2, Global.radius * 1.05);
+  updateLine(Global.lines[0], end0, Global.radius);
+  updateLine(Global.lines[1], start1, Global.radius);
+  updateLine(Global.lines[2], end1, Global.radius);
+  updateLine(Global.lines[3], start2, Global.radius);
   computeArcD(Global.arcs[0], start0, end0, Global.radius * 0.95);
   computeArcD(Global.arcs[1], start1, end1, Global.radius * 0.95);
   computeArcD(Global.arcs[2], start2, end2, Global.radius * 0.95);
-  updateText(Global.breaks[0], end0, Global.radius * 1.2, secondsToFormattedString(end0) + "-" + secondsToFormattedString(start1));
-  updateText(Global.breaks[1], start2, Global.radius * 1.2, secondsToFormattedString(end1) + "-" + secondsToFormattedString(start2));
+  updateText(Global.breaks[0], end0, Global.radius * 1.15, secondsToFormattedString(end0, true) + "\u2013" + secondsToFormattedString(start1, true));
+  updateText(Global.breaks[1], start2, Global.radius * 1.15, secondsToFormattedString(end1, true) + "\u2013" + secondsToFormattedString(start2, true));
 
 }
 
@@ -290,16 +293,16 @@ function() {
     }
   });
 
-  Global.width = 600;
+  Global.width = 650;
   Global.height = 500;
   Global.radius = Math.min(Global.height, Global.width) / 2 * 0.8;
   Global.svg = d3.select("svg").attr("width", Global.width).attr("height", Global.height);
   Global.svg.append("circle").attr("cx", Global.width / 2).attr("cy", Global.height / 2).attr("r", Global.radius).classed("clock", true);
   for (var i = 0; i < 60; ++i) {
-    drawSegment(i * 60, 0.95 * Global.radius, 1.05 * Global.radius).classed("tick", true);
+    drawSegment(i * 60, 0.95 * Global.radius, Global.radius).classed("tick", true);
   }
   for (var i = 5; i <= 60; i += 5) {
-    drawText(i * 60, 1.1 * Global.radius, i.toString());
+    drawText(i * 60, 1.06 * Global.radius, i.toString()).classed("tick", true);
   }
   Global.breaks = new Array(Global.svg.append("text"), Global.svg.append("text"));
   var topOfHour = Global.svg.append("path");
@@ -309,7 +312,7 @@ function() {
   var floater1 = Global.svg.append("path").classed("floating", true);
   var floater2 = Global.svg.append("path").classed("floating", true);
   Global.arcs = new Array(Global.svg.append("path").classed("arc", true), Global.svg.append("path").classed("arc", true), Global.svg.append("path").classed("arc", true));
-  Global.lines = new Array(drawLine(360, Global.radius * 1.05), drawLine(420, Global.radius * 1.05), drawLine(420, Global.radius * 1.05), drawLine(480, Global.radius * 1.05));
+  Global.lines = new Array(drawLine(360, Global.radius), drawLine(420, Global.radius), drawLine(420, Global.radius), drawLine(480, Global.radius));
   Global.warnings = $("td > div.warning");
   computeClosedArcD(floater1, 17 * 60, 23 * 60);
   computeClosedArcD(floater2, 37 * 60, 43 * 60);
