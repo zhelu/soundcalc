@@ -9,6 +9,16 @@ function logWarning(text) {
   $("#warningsDiv").append("<p class=\"warning\">" + text + "</p>").addClass("warning");
 }
 
+function updateText(obj, time, radius, text) {
+  var radians = Math.PI / 1800 * time;
+  var x = radius * Math.sin(radians) + Global.width / 2 - 8;
+  var y = -radius * Math.cos(radians) + Global.height / 2 + 5;
+  if (radians % (2 * Math.PI) > Math.PI) {
+    x -= 50;
+  }
+  return obj.attr("x", x).attr("y", y).text(text);
+}
+
 function displayWarnings() {
   $("#warningsDiv").detach();
   Global.warnings.append("<div id=\"warningsDiv\" class=\"other\"></div>");
@@ -22,8 +32,7 @@ function displayWarnings() {
     logWarning("Segment A is shorter than 11:00");
     error0 = true;
     Global.arcs[0].classed("warningUnder", true).classed("warningOver", false);
-  }
-  else if (time0 > 16 * 60) {
+  } else if (time0 > 16 * 60) {
     logWarning("Segment A is longer than 16:00");
     error0 = true;
     Global.arcs[0].classed("warningUnder", false).classed("warningOver", true);
@@ -151,6 +160,9 @@ function refreshDrawing() {
   computeArcD(Global.arcs[0], start0, end0, Global.radius * 0.95);
   computeArcD(Global.arcs[1], start1, end1, Global.radius * 0.95);
   computeArcD(Global.arcs[2], start2, end2, Global.radius * 0.95);
+  updateText(Global.breaks[0], end0, Global.radius * 1.2, secondsToFormattedString(end0) + "-" + secondsToFormattedString(start1));
+  updateText(Global.breaks[1], start2, Global.radius * 1.2, secondsToFormattedString(end1) + "-" + secondsToFormattedString(start2));
+
 }
 
 function totalTime() {
@@ -181,26 +193,26 @@ function() {
   $(".addNewRow").click(function() {
     var index = this.id.substring(this.id.length - 1);
     var j = Global.i[index];
-    $("#rowContainers" + index).append("<div class=\"rowContainer\"><span style=\"display: inline-block\"><p name=\"time\" id=\"time" + j + "-" + index + "\" time=0 style=\"min-width: 100px;\"></p></span><input id=\"file" + j + "-" + index + "\" type=\"file\" accept=\"audio/*\"/><audio id=\"audio" + j + "-" + index + "\"/><input type=\"button\" id=\"delete" + j + "-" + index + "\" value=\"Delete\"/></div>");
+    $("#rowContainers" + index).append("<div class=\"rowContainer\"><span style=\"display: inline-block\"><p name=\"time\" id=\"time" + index + "-" + j + "\" time=0 style=\"min-width: 100px;\"></p></span><input id=\"file" + index + "-" + j + "\" type=\"file\" accept=\"audio/*\"/><audio id=\"audio" + index + "-" + j + "\"/><input type=\"button\" name=\"delete\" id=\"delete" + index + "-" + j + "\" value=\"Delete\"/></div>");
 
-    $("#file" + j + "-" + index).change(function() {
+    $("#file" + index + "-" + j).change(function() {
       var k = j;
       var n = index;
-      var file = $("#file" + k + "-" + n)[0].files[0];
+      var file = $("#file" + n + "-" + k)[0].files[0];
       var objectUrl = URL.createObjectURL(file);
-      $("#audio" + k + "-" + n).prop("src", objectUrl);
+      $("#audio" + n + "-" + k).prop("src", objectUrl);
     });
 
-    $("#audio" + j + "-" + index).on("canplaythrough", function() {
+    $("#audio" + index + "-" + j).on("canplaythrough", function() {
       var seconds = $(this)[0].duration;
       var k = j;
       var n = index;
-      $("#time" + k + "-" + n).attr("time", seconds);
-      $("#time" + k + "-" + n).text(secondsToFormattedString(seconds));
+      $("#time" + n + "-" + k).attr("time", seconds);
+      $("#time" + n + "-" + k).text(secondsToFormattedString(seconds));
       totalTimeForSegment(n);
     })
 
-    $("#delete" + j + "-" + index).click(function() {
+    $("#delete" + index + "-" + j).click(function() {
       var n = index;
       var row = $(this).parent();
       row.remove();
@@ -212,23 +224,23 @@ function() {
   $(".addNewTime").click(function() {
     var index = this.id.substring(this.id.length - 1);
     var j = Global.i[index];
-    $("#rowContainers" + index).append("<div class=\"rowContainer\"><input type=\"text\" class=\"time\" name=\"time\" id=\"time" + j + "-" + index + "\" time=\"0\" value=\"0:00\"/><input type=\"text\" placeholder=\"Comments\" class=\"comment\"/><input id=\"refreshManual" + j + "-" + index + "\" type=\"button\" value=\"Refresh\"/><input type=\"button\" + id=\"delete" + j + "-" + index + "\" value=\"Delete\"/></div>");
-    $("#refreshManual" + j + "-" + index).click(function() {
+    $("#rowContainers" + index).append("<div class=\"rowContainer\"><input type=\"text\" class=\"time\" name=\"time\" id=\"time" + index + "-" + j + "\" time=\"0\" value=\"0:00\"/><input type=\"text\" id=\"comment" + index + "-" + j + "\" placeholder=\"Comments\" class=\"comment\"/><input id=\"refreshManual" + index + "-" + j + "\" type=\"button\" value=\"Refresh\"/><input type=\"button\" name=\"delete\" id=\"delete" + index + "-" + j + "\" value=\"Delete\"/></div>");
+    $("#refreshManual" + index + "-" + j).click(function() {
       var k = j;
       var n = index;
-      var userTime = $("#time" + k + "-" + n).val();
+      var userTime = $("#time" + n + "-" + k).val();
       var timePieces = userTime.match("(\\d*):(\\d\\d)");
       if (timePieces === null || timePieces.length == 0) {
-        $("#time" + k + "-" + n).addClass("error");
+        $("#time" + n + "-" + k).addClass("error");
         return;
       }
-      $("#time" + k + "-" + n).removeClass("error");
+      $("#time" + n + "-" + k).removeClass("error");
       var time = Number(timePieces[1]) * 60 + Number(timePieces[2]);
-      $("#time" + k + "-" + n).attr("time", time);
+      $("#time" + n + "-" + k).attr("time", time);
       totalTimeForSegment(n);
     });
 
-    $("#delete" + j + "-" + index).click(function() {
+    $("#delete" + index + "-" + j).click(function() {
       var n = index;
       var row = $(this).parent();
       row.remove();
@@ -239,7 +251,46 @@ function() {
     Global.i[index]++;
   });
 
-  Global.width = 500;
+  $("#reset").click(function() {
+    $("input[name=\"delete\"]").trigger("click");
+    Global.i = new Array(0, 0, 0);
+  });
+
+  $("#save").click(function() {
+    var data = new Object();
+    var counter = new Array(0, 0, 0);
+    $("input[type=\"text\"]").each(function() {
+      var id = $(this).attr("id").match("([a-z]+)(\\d+)-(\\d+)");
+      var type = id[1];
+      var segment = id[2];
+      if (data[segment + "-" + counter[segment]] === undefined) {
+        data[segment + "-" + counter[segment]] = new Object();
+      }
+      data[segment + "-" + counter[segment]][type] = $(this).val();
+      if (type == "comment") {
+        counter[segment]++;
+      }
+    });
+    data["counter"] = counter;
+    localStorage.setItem("soundcalc", JSON.stringify(data));
+  });
+
+  $("#load").click(function() {
+    $("#reset").trigger("click");
+    var data = JSON.parse(localStorage.getItem("soundcalc"));
+    for (var segment = 0; segment < 3; ++segment) {
+      for (var i = 0; i < data["counter"][segment]; ++i) {
+        var formName = segment + "-" + Global.i[segment];
+        $("#addNewTime" + segment).trigger("click");
+        var dataName = segment + "-" + i;
+        $("#time" + formName).val(data[dataName]["time"]);
+        $("#comment" + formName).val(data[dataName]["comment"]);
+        $("#refreshManual" + formName).trigger("click");
+      }
+    }
+  });
+
+  Global.width = 600;
   Global.height = 500;
   Global.radius = Math.min(Global.height, Global.width) / 2 * 0.8;
   Global.svg = d3.select("svg").attr("width", Global.width).attr("height", Global.height);
@@ -250,6 +301,7 @@ function() {
   for (var i = 5; i <= 60; i += 5) {
     drawText(i * 60, 1.1 * Global.radius, i.toString());
   }
+  Global.breaks = new Array(Global.svg.append("text"), Global.svg.append("text"));
   var topOfHour = Global.svg.append("path");
   var bottomOfHour = Global.svg.append("path");
   computeClosedArcD(topOfHour, 0, 360).classed("dead", true);
