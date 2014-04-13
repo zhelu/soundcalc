@@ -252,6 +252,11 @@ function() {
 
     totalTimeForSegment(index);
     Global.i[index]++;
+    
+    $("#time" + index + "-" + j).focus();
+    $("#time" + index + "-" + j).focusout(function() {
+      $("#refreshManual" + index + "-" + j).trigger("click");
+    });
   });
 
   $("#reset").click(function() {
@@ -318,4 +323,3 @@ function() {
   computeClosedArcD(floater2, 37 * 60, 43 * 60);
   totalTime();
 });
-
