@@ -66,21 +66,21 @@ function displayWarnings() {
   }
   if (!error1 && !error0 && time0 + 60 + time1 > 36 * 60) {
     logWarning("Segments A and B are too long together");
-    Global.arcs[0].classed("warningUnder", true);
-    Global.arcs[1].classed("warningUnder", true);
-  } else if (!error1 && !error0 && time0 + 60 + time1 < 31 * 60) {
-    logWarning("Segments A and B are too short together");
     Global.arcs[0].classed("warningOver", true);
     Global.arcs[1].classed("warningOver", true);
+  } else if (!error1 && !error0 && time0 + 60 + time1 < 31 * 60) {
+    logWarning("Segments A and B are too short together");
+    Global.arcs[0].classed("warningUnder", true);
+    Global.arcs[1].classed("warningUnder", true);
   }
   if (!error2 && !error1 && time1 + 60 + time2 > 40.5 * 60) {
     logWarning("Segments B and C are too long together");
-    Global.arcs[2].classed("warningUnder", true);
-    Global.arcs[1].classed("warningUnder", true);
-  } else if (!error1 && !error2 && time1 + 60 + time2 < 35.5 * 60) {
-    logWarning("Segments B and C are too short together");
     Global.arcs[2].classed("warningOver", true);
     Global.arcs[1].classed("warningOver", true);
+  } else if (!error1 && !error2 && time1 + 60 + time2 < 35.5 * 60) {
+    logWarning("Segments B and C are too short together");
+    Global.arcs[2].classed("warningUnder", true);
+    Global.arcs[1].classed("warningUnder", true);
   }
 }
 
